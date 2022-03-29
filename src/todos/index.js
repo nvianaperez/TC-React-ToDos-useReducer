@@ -3,8 +3,21 @@ import { AfegirToDo } from "./AfegirToDo";
 import { TodoList } from "./TodoList";
 import { getTodos } from "./todosAPI";
 
+const initialState = [];
+function reduceTodos(state = initialState, action) {
+  switch (action.type) {
+    case "ADD_TODO":
+      return [...state, action.todo]; //equival a [...todos, todo]
+    // case "UPDATE_TODO":
+    //   return [...state, action.todo]; //equival a [...todos, todo]
+
+    default:
+      return state;
+  }
+}
+
 export function Todos() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(initialState);
 
   useEffect(() => {
     loadTodos();
@@ -14,7 +27,8 @@ export function Todos() {
   }, []);
 
   const loadTodos = () => getTodos().then(setTodos);
-  const onTodoAdded = (todo) => setTodos([...todos, todo]);
+  const onTodoAdded = (todo) =>
+    setTodos(reduceTodos(todos, { type: "ADD_TODO", todo }));
   const onTodoUpdated = (upDatedTodo) =>
     setTodos(
       todos.map((currentTodo) =>
